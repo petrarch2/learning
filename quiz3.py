@@ -4,4 +4,4 @@ def collatz(number):
  except
   print('Error:Invalid argument.')
   
- number = 0
+ number = 5
