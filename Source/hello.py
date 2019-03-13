@@ -12,7 +12,7 @@ from random import randint
         # print('Small',value)
     # value=int(input())
 # print('equel',value)
-num = [4,5,7,3,4]; 
+num = [1,5,7,3,4]; 
 l = ['meat', 'egg', 'fish', 'milk']
 j = {'meat', 'egg', 'fish', 'milk'}
 p = ('meat', 'egg', 'fish', 'milk')
