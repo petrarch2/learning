@@ -16,7 +16,7 @@ num = [1,5,7,3,4];
 l = ['meat', 'egg', 'fish', 'milk']
 j = {'meat', 'egg', 'fish', 'milk'}
 p = ('meat', 'egg', 'fish', 'milk')
-q = ['meat', 'egg', 'fish', 6.9]
+q = ['meat', 'egg', 'fish', 6.7]
 num.append(8)
 del num[1]
 for i in l:
