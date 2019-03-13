@@ -1,0 +1,12 @@
+>root
+:Hello!
+>language
+:Python
+<
+>greets
+>target
+:World
+:System
+<
+<
+<
