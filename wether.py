@@ -6,7 +6,7 @@ import socket
 import httplib2,urllib
 
 
-params = urllib.urlencode({'ip':'9.8.8.8','datatype':'jsonp','callback':'find'})
+params = urllib.parse.urlencode({'ip':'9.8.8.8','datatype':'jsonp','callback':'find'})
 url = 'http://api.ip138.com/query/?'+params
 headers = {"token":"8594766483a2d65d76804906dd1a1c6a"}#token为示例
 http = httplib2.Http()
