@@ -1,2 +1,2 @@
-#!/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
+#!/usr/bin/env python3
 print( 'Hello, World' )

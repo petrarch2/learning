@@ -1,5 +1,5 @@
-#!/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
-# -*- coding:utf-8 -*
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 #导入 Tkinter 库
 from tkinter import *          #Tk, ttk//import tkinter
