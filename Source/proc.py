@@ -6,4 +6,5 @@ def proc(n):
 		proc(n//10)
 	print(n % 10,end='')
 
-proc(-345)
+value=int(input('input value for int:'))
+proc(value)
