@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'John Smith'
+__author__ = 'NERO'
 
 #导入 Tkinter 库
 from tkinter import *          #Tk, ttk//import tkinter

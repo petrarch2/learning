@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 # My extensions
+.DS_Store
 .idea/
 .metadata/
 project0/
@@ -131,4 +132,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-.DS_Store
