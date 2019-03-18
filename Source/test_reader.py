@@ -3,23 +3,16 @@ Created on 2019年3月15日
 
 @author: NERO
 '''
-from tkinter.constants import BOTH
-from builtins import str
-'''
-Created on ${date}
 
-@author: ${user}
-'''
-import tkinter
-from tkinter.filedialog import askdirectory
-import os
+import tkinter,os
 from PIL import Image,ImageTk
+from tkinter import filedialog
 
 def GetPicL(pdir):  # 读取图片文件列表
     _pics = []
     for parent, dirnames, filenames in os.walk(pdir):
         for filename in filenames:
-            if (filename.endswith('.jpg') or filename.endswith('.png')):
+            if (filename.endswith('.jpg') or filename.endswith('.png') or filename.endswith('.JPG')):
                 _pics.append(os.path.join(parent, filename))  # 保存PIC路径信息到列表
         #  print os.path.join(parent,filename)        #DEBUG
     return _pics
@@ -50,8 +43,7 @@ def ShowPic(value):  # 显示图片
     title['text'] = pics[postion]  # 设置图片标题
     title.pack(fill="x", expand=1)
 
-    print
-    pics[postion]
+    print(pics[postion])
     return True
 
 def Repos(value):
@@ -59,17 +51,15 @@ def Repos(value):
     postion = value
     ShowPic(2)
     
-       
-if __name__ == '__main__':    
+if __name__ == '__main__':
     MainForm = tkinter.Tk()  # 创建主窗体
     MainForm.title("漫画浏览器")  # 窗体标题
 
     """读配置文件"""
-    #rdir = '/Users/NERO/Documents/test_reader'
-    rdir = askdirectory()
+    rdir = tkinter.filedialog.askdirectory()
     #rdir = 'C:\Users\Administrator\Desktop\s'  # 图片根目录，限制图片<=3层
-    w_box = 1360  # 图片显示大小
-    h_box = 760
+    w_box = MainForm.winfo_screenwidth()#1360  # 图片显示大小
+    h_box = MainForm.winfo_screenheight()#760
     postion = 0
     
     '''读配置文件 结束'''
@@ -99,3 +89,10 @@ if __name__ == '__main__':
 
     ShowPic(1)
     MainForm.mainloop()
+
+    #pyinstaller -w -F test_reader.py
+    #-F：是直接生成单独的exe文件，不附带各种依赖文件的
+    #-c：生成的exe文件打开方式为控制台打开
+    #-w：这个和上面的-c对应，如果你的程序是有ui的，那就用这个-w。这样不会出现控制台，直接是你的ui
+    #-I：给你的exe文件添加一个图标，后面要紧接着你想要的ico文件
+    #-p：后面紧跟着你要指定的模块搜索路径
