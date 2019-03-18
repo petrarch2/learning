@@ -21,5 +21,10 @@ if 0:
 
 else:
     #通过urllib.request.Request给请求添加头部信息
-    request = urllib.request.Request('https://baidu.com')
-    print(urllib.request.urlopen(request).read().decode('utf-8'))
+    request = urllib.request.Request('https://bilibili.com')
+    request.add_header('User-Agent', 'Mozilla/6.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X)\
+     AppleWebKit/536.26 (KHTML, like Gecko) Version/8.0 Mobile/10A5376e Safari/8536.25')
+    response = urllib.request.urlopen(request)
+    for k, v in response.getheaders():
+        print('%s: %s' % (k, v))
+#     print('Data:', response.read().decode('utf-8'))
