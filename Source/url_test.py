@@ -7,7 +7,7 @@ __date__ = '2019/3/18'
 import configparser,os
 import urllib.request,urllib.parse,socket,urllib.error
 import requests,json,re
-#python $FileName$ build_ext --inplace
+
 '''
 正则表达式常用的匹配模式
 \w      匹配字母数字及下划线
