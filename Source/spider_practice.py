@@ -27,20 +27,20 @@ if 1:
     menu = doc('.desktop a')
     for char in menu:
         label = pq(char)
-        print(label.text() ,':',label.attr.href)
+        print(label.text() ,':',url+label.attr.href)
 
     pages = doc('.pagination a')
     for page in pages:
         navi = pq(page)
         #<a href="?page=5" class="page">5</a>
-        #print(navi.doc('.class_name') ,navi.text(), ':', navi.attr.href)
+        print(navi.attr('class') ,navi.text(), ':', url+navi.attr.href)
 
     items  = doc('.gallery')
     for item in items:
         lis = pq(item)('a')
         print(lis('.caption').text())
         print(lis('img').attr('data-src'))
-        print(lis.attr.href)
+        print(url+lis.attr.href)
         print(lis.parent().attr('data-tags'))
     print(len(items))
 
