@@ -16,7 +16,7 @@ base = os.path.dirname(base)                #上二级目录
 conf_path = os.path.join(base,"conf.ini")
 config  = configparser.ConfigParser()
 config.read(conf_path)
-url = 'https://www.ipip.net/'     #config['DEFAULT']['url']
+url = 'https://ip.cn'#https://www.ipip.net/'     #config['DEFAULT']['url']
 keyword = config['DEFAULT']['keyword']
 
 user_agent = [
@@ -37,13 +37,14 @@ user_agent = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20",
     "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52",
 ]
-# proxies=[{'https':'https://1.4.218.76:8080'},{'https':'https://1.253.118.205:3128'}, \
-#          {'https': 'https://101.51.139.137:8080'},{'https':'https://101.255.125.10:8080'} ]
-proxies={'http':'http://100.24.136.171:3128'}
+proxies=[{'http':'http://117.191.11.71:80','https':'https://1.4.218.76:8080'},\
+         {'http':'http://117.191.11.112:80','https':'https://1.253.118.205:3128'}, \
+        {'http':'http://101.37.20.241:443','https': 'https://101.51.139.137:8080'},\
+        {'http':'http://39.137.46.75:80','https':'https://101.255.125.10:8080'} ,\
+        {'http':'socks5://39.137.46.75:80','https':'socks5://36.32.24.170:1080'} ]
 ssl._create_default_https_context = ssl._create_unverified_context
-# content = requests.get(url,headers = {'User-Agent': random.choice(user_agent)},\
-#                        proxies=random.choice(proxies),verify=False).text
-content = requests.get(url,proxies=proxies).text
+content = requests.get(url,headers = {'User-Agent': random.choice(user_agent)},\
+                        proxies=random.choice(proxies),verify=False).text
 
 # doc = pq(content)
 # pages = doc('.thumb-container a')
@@ -59,7 +60,8 @@ content = requests.get(url,proxies=proxies).text
 #检测当前访问使用的IP地址
 html=etree.HTML(content)
 try :
-    ip=html.xpath('//div[@class="yourInfo"]/ul/li[1]/text()')[0]
+    ip=html.xpath('//div[@class="yourInfo"]/ul/li[1]/a/text()')
+    print(content)
 except:
     ip=html.xpath('/html/body/div/center/text()')[0]
     print("当前请求IP地址为："+ip)
