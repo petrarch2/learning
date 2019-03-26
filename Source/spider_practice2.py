@@ -8,6 +8,7 @@ import configparser,os,requests,random,time,ssl
 from bs4 import BeautifulSoup
 from pyquery import PyQuery as pq
 from selenium import webdriver
+from lxml import etree
 
 base = os.path.dirname(__file__)            #文件目录
 base = os.path.dirname(base)                #上一级目录
@@ -15,7 +16,7 @@ base = os.path.dirname(base)                #上二级目录
 conf_path = os.path.join(base,"conf.ini")
 config  = configparser.ConfigParser()
 config.read(conf_path)
-url = config['DEFAULT']['url']
+url = 'https://www.ipip.net/'     #config['DEFAULT']['url']
 keyword = config['DEFAULT']['keyword']
 
 user_agent = [
@@ -36,23 +37,32 @@ user_agent = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20",
     "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52",
 ]
-proxies=[{'https':'https://113.121.155.211:9999'},{'https':'https://61.164.39.68:53281'}, \
-         {'https': 'https://111.177.173.48:9999'},{'https':'https://182.92.113.148:8118'} ]
+# proxies=[{'https':'https://1.4.218.76:8080'},{'https':'https://1.253.118.205:3128'}, \
+#          {'https': 'https://101.51.139.137:8080'},{'https':'https://101.255.125.10:8080'} ]
+proxies={'http':'http://100.24.136.171:3128'}
 ssl._create_default_https_context = ssl._create_unverified_context
-content = requests.get(url,headers = {'User-Agent': random.choice(user_agent)},\
-                       proxies=random.choice(proxies),verify=False).text
+# content = requests.get(url,headers = {'User-Agent': random.choice(user_agent)},\
+#                        proxies=random.choice(proxies),verify=False).text
+content = requests.get(url,proxies=proxies).text
 
-doc = pq(content)
-#print(doc)
-pages = doc('.thumb-container a')
-print(len(pages))
-for page in pages:
-    navi = pq(page)
-    realurl = keyword + navi.attr.href
-    photo = pq(requests.get(realurl,proxies=random.choice(proxies)).text)
-    lis = photo('#image-container a')('img').attr('src')
-    print(lis)
-    time.sleep(1)
+# doc = pq(content)
+# pages = doc('.thumb-container a')
+# print(len(pages))
+# for page in pages:
+#     navi = pq(page)
+#     realurl = keyword + navi.attr.href
+#     photo = pq(requests.get(realurl,headers={'Connection':'close'},proxies=random.choice(proxies)).text)
+#     lis = photo('#image-container a')('img').attr('src')
+#     print(lis)
+#     time.sleep(1)
+
+#检测当前访问使用的IP地址
+html=etree.HTML(content)
+try :
+    ip=html.xpath('//div[@class="yourInfo"]/ul/li[1]/text()')[0]
+except:
+    ip=html.xpath('/html/body/div/center/text()')[0]
+    print("当前请求IP地址为："+ip)
 
 
 
