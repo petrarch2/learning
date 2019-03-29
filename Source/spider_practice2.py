@@ -5,7 +5,6 @@ Created on 2019年3月21日
 '''
 import configparser,os,requests,random,time,ssl
 
-from bs4 import BeautifulSoup
 from pyquery import PyQuery as pq
 from selenium import webdriver
 from lxml import etree
@@ -16,7 +15,7 @@ base = os.path.dirname(base)                #上二级目录
 conf_path = os.path.join(base,"conf.ini")
 config  = configparser.ConfigParser()
 config.read(conf_path)
-url = 'https://ip.cn'#https://www.ipip.net/'     #config['DEFAULT']['url']
+url = 'https://proxy.mimvp.com/'#config['DEFAULT']['url']
 keyword = config['DEFAULT']['keyword']
 
 user_agent = [
@@ -37,37 +36,36 @@ user_agent = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20",
     "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52",
 ]
-proxies=[{'http':'http://117.191.11.71:80','https':'https://115.159.206.127:80'},\
-        {'http':'http://117.191.11.112:80','https':'https://118.89.138.129:59460'}, \
-        {'http':'http://101.37.20.241:443','https': 'https://223.166.247.206:9000'},\
-        {'http':'http://39.137.46.75:80','https':'https://60.190.153.150:8080'} ,\
+proxies=[{'http':'http://222.184.7.206:45570','https':'https://222.184.7.206:45570'},\
+        {'http':'socks5://123.58.55.162:1080','https':'socks5://123.58.55.162:1080'}, \
+        {'http':'socks5://122.226.135.89:1080','https':'socks5://122.226.135.89:1080'},\
+        {'http':'socks5://112.16.5.62:1080','https':'socks5://112.16.5.62:1080'} ,\
         {'http':'socks5://36.32.24.170:1080','https':'socks5://36.32.24.170:1080'},\
         {'http':'socks5://106.14.225.196:8082','https':'socks5://106.14.225.196:8082'} ]
 ssl._create_default_https_context = ssl._create_unverified_context
 content = requests.get(url,headers = {'User-Agent': random.choice(user_agent)},\
                         proxies=proxies[0],verify=False).text
 
-# doc = pq(content)
-# pages = doc('.thumb-container a')
-# print(len(pages))
-# for page in pages:
-#     navi = pq(page)
-#     realurl = keyword + navi.attr.href
-#     photo = pq(requests.get(realurl,headers={'Connection':'close'},proxies=random.choice(proxies)).text)
-#     lis = photo('#image-container a')('img').attr('src')
-#     print(lis)
-#     time.sleep(1)
+if 1:
+    doc = pq(content)
+    pages = doc('.thumb-container a')
+    print(len(pages))
+    for page in pages:
+        navi = pq(page)
+        realurl = keyword + navi.attr.href
+        photo = pq(requests.get(realurl,headers={'Connection':'close'},proxies=random.choice(proxies)).text)
+        lis = photo('#image-container a')('img').attr('src')
+        print(lis)
+        #time.sleep(1)
 
-#检测当前访问使用的IP地址
-html=etree.HTML(content)
-try :
-    ip=html.xpath('//div[@class="yourInfo"]/ul/li[1]/a/text()')
-    print(ip)
-except:
-    ip=html.xpath('/html/body/div/center/text()')[0]
+else:
+    #检测当前访问使用的IP地址，测试代理IP是否可用
+    html=etree.HTML(content)
+    ip=html.xpath('//div[@class="yourInfo"]/ul/li[1]/a/text()')[0]
     print("当前请求IP地址为："+ip)
 
-browser = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
-browser.get(url)
-print(browser.page_source)
+    #练习selenium+phantomjs
+    browser = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
+    browser.get(url)
+    print(browser.page_source)
 

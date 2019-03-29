@@ -7,9 +7,8 @@ __date__ = '2019/3/21'
 import configparser,os,requests
 from bs4 import BeautifulSoup
 from pyquery import PyQuery as pq
-from selenium import webdriver
 
-
+#从配置文件读取网址
 base = os.path.dirname(__file__)            #文件目录
 base = os.path.dirname(base)                #上一级目录
 base = os.path.dirname(base)                #上二级目录
@@ -19,8 +18,11 @@ config.read(conf_path)
 url = config['DEFAULT']['url']
 keyword = config['DEFAULT']['keyword']
 
+#用requests获取网页信息
 content = requests.get(url).text
+#解析网页
 if 1:
+    # 练习pyquery
     doc = pq(content)
     # print(doc)
     # print(type(doc))
@@ -47,6 +49,7 @@ if 1:
 
 
 else:
+    # 练习BeautifulSoup
     soup = BeautifulSoup(content, 'lxml')
     print(soup.prettify())
     print(soup.title)               #通过soup.标签名获得这个标签的内容
@@ -63,6 +66,3 @@ else:
 
 
 
-    browser = webdriver.PhantomJS()
-    browser.get(url)
-    print(browser.page_source)
