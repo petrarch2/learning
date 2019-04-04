@@ -3,8 +3,8 @@ Created on 2019年3月21日
 
 @author: NERO
 '''
-import configparser,os,requests,random,time,ssl,re
-
+import configparser,os,requests,random,time,ssl,re,json
+from bs4 import BeautifulSoup
 from pyquery import PyQuery as pq
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -18,6 +18,36 @@ config  = configparser.ConfigParser()
 config.read(conf_path)
 url = config['DEFAULT']['url']
 keyword = config['DEFAULT']['keyword']
+
+def parse_html(html):
+    '''
+    :param html: 传入html源码
+    :return: 通过yield生成一个生成器，存储爬取的每行信息
+    '''
+    soup = BeautifulSoup(html, 'lxml')
+
+    table = soup.find("table", attrs={"id": "report"})
+    trs = table.find("tr").find_next_siblings()
+    for tr in trs:
+        tds = tr.find_all("td")
+        yield [
+            tds[0].text.strip(),
+            tds[1].text.strip(),
+            tds[2].text.strip(),
+            tds[3].text.strip(),
+            tds[4].text.strip(),
+            tds[5].text.strip(),
+            tds[6].text.strip(),
+            tds[7].text.strip(),
+            tds[8].text.strip(),
+        ]
+
+def write_to_file(content):
+    '''
+    :param content:要写入文件的内容
+    '''
+    with open("result.txt",'a',encoding="utf-8") as f:
+        f.write(json.dumps(content,ensure_ascii=False)+"\n")
 
 if 0:
     user_agent = [
@@ -110,9 +140,9 @@ else:
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 SE 2.X MetaSr 1.0'
     }
     data = {
-        'yzm':'CHgF',
-        'ktrqks': '2019 - 04 - 03',
-        'ktrqjs': '2019 - 05 - 03',
+        'yzm':'PA5J',
+        'ktrqks':'2019-04-17',
+        'ktrqjs':'2019-04-17',
         'pagesnum':1
     }
     content = requests.post(url, headers=headers,data=data).text
@@ -120,4 +150,24 @@ else:
     table = doc('.meneame a ')
     pages = int(re.sub("\D", "", str(table[len(table)-1].attrib)))
     data['pagesnum'] = pages
-    print(data)
+    print(pages)
+    time.sleep(2)
+    for i in range(1, pages+1):
+        while True:
+            data['pagesnum'] = i
+            content = requests.post(url, headers=headers,data=data).text
+            soup = BeautifulSoup(content, 'lxml')
+            if type(soup.title) != type(None):
+                print("系统繁忙，登录太频繁，ip被封锁")
+                time.sleep(20)
+                continue
+            else:
+                break
+        res = parse_html(content)
+        for j in res:
+            write_to_file(j)
+        print("爬取完第【%s】页,总共【%s】页" %(i,pages))
+        time.sleep(random.uniform(1.1,5.0))
+    else:
+        print("爬取完毕")
+
